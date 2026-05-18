@@ -45,7 +45,7 @@ async function loadProducts() {
     try {
 
         const res = await fetch(
-            `http://192.168.20.2:3001/products?page=${page}&gender=${selectedGender}&size=${selectedSize}`,
+            `https://node-api-fmq5.onrender.com/products?page=${page}&gender=${selectedGender}&size=${selectedSize}`,
             {
                 cache: "no-store"
             }
