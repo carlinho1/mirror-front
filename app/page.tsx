@@ -15,6 +15,7 @@ export default function Home() {
 
     const [selectedGender, setSelectedGender] = useState("");
 
+    const [selectedColor, setSelectedColor] = useState("");
 
         // STEP 3
     // RESET PRODUCTS WHEN FILTER CHANGES
@@ -27,7 +28,7 @@ export default function Home() {
 
         setHasMore(true);
 
-    }, [selectedGender, selectedSize]);
+    }, [selectedGender, selectedSize, selectedColor]);
 
 
     // STEP 4
@@ -37,19 +38,33 @@ export default function Home() {
 
         loadProducts();
 
-    }, [page, selectedGender, selectedSize]);
+    }, [page, selectedGender, selectedSize, selectedColor]);
 
 
 async function loadProducts() {
 
     try {
 
+        //const res = await fetch(
+        //   `https://node-api-fmq5.onrender.com/products?page=${page}&gender=${selectedGender}&size=${selectedSize}`,
+        //    {
+        //        cache: "no-store"
+        //    }
+        //);
+
         const res = await fetch(
-            `https://node-api-fmq5.onrender.com/products?page=${page}&gender=${selectedGender}&size=${selectedSize}`,
+            `https://node-api-fmq5.onrender.com/products?page=${page}&gender=${selectedGender}&size=${selectedSize}&color=${selectedColor}`,
             {
                 cache: "no-store"
             }
-        );
+        );  
+
+        // const res = await fetch(
+        //     `https://node-api-fmq5.onrender.com/products?page=${page}&gender=${selectedGender}&size=${selectedSize}`,
+        //     {
+        //         cache: "no-store"
+        //     }
+        // );
 
         const data = await res.json();
 
@@ -259,6 +274,72 @@ async function loadProducts() {
 
 
 
+
+
+
+
+
+
+<h2 className="text-xl font-bold mb-4">
+    Filtra por color
+</h2>
+
+
+
+<div className="flex flex-wrap gap-2 mb-8">
+
+    {[
+        "Black",
+        "White",
+        "Beige",
+        "Blue",
+        "Red",
+        "Green",
+        "Grey"
+    ].map((color) => (
+
+        <button
+            key={color}
+
+            onClick={() =>
+                setSelectedColor(
+                    selectedColor === color
+                        ? ""
+                        : color
+                )
+            }
+
+            className={`
+                px-4
+                py-2
+                rounded-xl
+                border
+                transition
+
+                ${
+                    selectedColor === color
+                        ? "bg-black text-white"
+                        : "bg-white"
+                }
+            `}
+        >
+            {color}
+        </button>
+
+    ))}
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
                 <InfiniteScroll
                     dataLength={products.length}
                     next={loadProducts}
@@ -316,161 +397,325 @@ async function loadProducts() {
 
                                 product.gender === selectedGender;
 
-                            return matchesSize && matchesGender;
+
+
+// // EXTRAER COLOR DESDE TAGS
+// //     const colorTag = product.tags?.find(
+// //         (tag:string) =>
+// //             tag.includes("Color::")
+// //     );
+
+// //     const productColor = colorTag
+// //         ?.split("Color::")[1]
+// //         ?.split("/")[0]
+// //         ?.trim();
+
+// //     FILTRO COLOR
+// //     const matchesColor = !selectedColor ||
+
+// //         productColor === selectedColor;
+
+// const colorTag = product.tags?.find(
+//     (tag:string) =>
+//         tag.includes("Color::")
+// );
+
+// const productColors = colorTag
+//     ?.split("Color::")[1]
+//     ?.split("/")
+//     ?.map(
+//         (c:string) => c.trim()
+//     );
+
+// const matchesColor = !selectedColor ||
+
+//     productColors?.includes(
+//         selectedColor
+//     );
+
+const colorTag = product.tags?.find(
+    (tag:string)=>
+        tag.includes("Color::")
+);
+
+const productColors = colorTag
+    ?.split("Color::")[1]
+    ?.split("/")
+    ?.map(
+        (c:string)=>
+            c.trim()
+    );
+
+const matchesColor =
+    !selectedColor ||
+
+    productColors?.includes(
+        selectedColor
+    );
+
+
+                            return matchesSize && matchesGender && matchesColor;
+
+
+
+
                         })
 
                             .map((product: any) => {
 
 
+    // const firstNames = [
+
+    //     "Urban",
+    //     "Shadow",
+    //     "Nova",
+    //     "Velocity",
+    //     "Quantum",
+    //     "Motion",
+    //     "Street",
+    //     "Elite",
+    //     "Vision",
+    //     "Fusion",
+    //     "Dynamic",
+    //     "Apex",
+    //     "Vertex",
+    //     "Legacy",
+    //     "Prime",
+    //     "Vortex",
+    //     "Neo",
+    //     "Storm",
+    //     "Pulse",
+    //     "Titan",
+    //     "Infinity",
+    //     "Orbit",
+    //     "Matrix",
+    //     "Ignite",
+    //     "Blaze",
+    //     "Rush",
+    //     "Turbo",
+    //     "Hyper",
+    //     "Zenith",
+    //     "Sonic",
+    //     "Volt",
+    //     "Royal",
+    //     "Astral",
+    //     "Cyber",
+    //     "Gravity",
+    //     "Altitude",
+    //     "Core",
+    //     "Rapid",
+    //     "Chrome",
+    //     "Drift"
+    // ];
+
+    // const secondNames = [
+
+    //     "Runner",
+    //     "Flex",
+    //     "Mode",
+    //     "Force",
+    //     "Wave",
+    //     "Edge",
+    //     "Fly",
+    //     "Boost",
+    //     "Flow",
+    //     "Drive",
+    //     "Sprint",
+    //     "Vision",
+    //     "Motion",
+    //     "Pulse",
+    //     "Strike",
+    //     "Storm",
+    //     "Impact",
+    //     "X",
+    //     "Pro",
+    //     "Max",
+    //     "Elite",
+    //     "Prime",
+    //     "React",
+    //     "Fusion",
+    //     "Shift",
+    //     "Nova",
+    //     "Air",
+    //     "Energy",
+    //     "One",
+    //     "Core",
+    //     "Velocity",
+    //     "Infinity",
+    //     "Power",
+    //     "Light",
+    //     "Jump",
+    //     "ForceX",
+    //     "Nitro",
+    //     "WaveX",
+    //     "Rush",
+    //     "Flyer"
+    // ];
+
+    // const thirdNames = [
+
+    //     "Silver",
+    //     "Gold",
+    //     "Carbon",
+    //     "Steel",
+    //     "Ghost",
+    //     "Phantom",
+    //     "Shadow",
+    //     "Ice",
+    //     "Fire",
+    //     "Volt",
+    //     "Thunder",
+    //     "Night",
+    //     "Sky",
+    //     "Cloud",
+    //     "Stone",
+    //     "Graphite",
+    //     "Neon",
+    //     "Flame",
+    //     "Titanium",
+    //     "Crystal",
+    //     "Obsidian",
+    //     "Arctic",
+    //     "Inferno",
+    //     "Ocean",
+    //     "Midnight",
+    //     "Pearl",
+    //     "Smoke",
+    //     "Lunar",
+    //     "Solar",
+    //     "Emerald",
+    //     "Ruby",
+    //     "Onyx",
+    //     "Ivory",
+    //     "Storm",
+    //     "Frost",
+    //     "Platinum"
+    // ];
+
+    // const fakeName =
+
+    //     firstNames[
+    //         product.id % firstNames.length
+    //     ]
+
+    //     + " " +
+
+    //     secondNames[
+    //         product.id % secondNames.length
+    //     ]
+
+    //     + " " +
+
+    //     thirdNames[
+    //         product.id % thirdNames.length
+    //     ]
+
+    //     + " " +
+
+    //     product.id.toString().slice(-4);
+
     const firstNames = [
+    "Palermo",
+    "Slipstream",
+    "Suede",
+    "Clyde",
+    "Teveris",
+    "Spirex",
+    "Morphic",
+    "Trinity",
+    "Caven",
+    "Pacer",
+    "Electron",
+    "Mirage",
+    "Velophasis",
+    "Rider",
+    "Hypnotic",
+    "Future",
+    "Plexus",
+    "R698",
+    "TRC",
+    "RS-X",
+    "Court",
+    "Blaze",
+    "Indoor",
+    "GV",
+    "CA"
+];
 
-        "Urban",
-        "Shadow",
-        "Nova",
-        "Velocity",
-        "Quantum",
-        "Motion",
-        "Street",
-        "Elite",
-        "Vision",
-        "Fusion",
-        "Dynamic",
-        "Apex",
-        "Vertex",
-        "Legacy",
-        "Prime",
-        "Vortex",
-        "Neo",
-        "Storm",
-        "Pulse",
-        "Titan",
-        "Infinity",
-        "Orbit",
-        "Matrix",
-        "Ignite",
-        "Blaze",
-        "Rush",
-        "Turbo",
-        "Hyper",
-        "Zenith",
-        "Sonic",
-        "Volt",
-        "Royal",
-        "Astral",
-        "Cyber",
-        "Gravity",
-        "Altitude",
-        "Core",
-        "Rapid",
-        "Chrome",
-        "Drift"
-    ];
+const secondNames = [
+    "NITRO",
+    "Speed",
+    "Fusion",
+    "Retro",
+    "Sport",
+    "Classic",
+    "Premium",
+    "Street",
+    "Tech",
+    "Racer",
+    "Athletic",
+    "Garage",
+    "Performance",
+    "Track",
+    "Runner",
+    "Motion",
+    "Heritage",
+    "Vintage",
+    "Lux",
+    "Drift",
+    "Tokyo",
+    "NYC",
+    "Summer",
+    "Garage",
+    "Cat",
+    "Style",
+    "Wave",
+    "Club",
+    "Base",
+    "Remix"
+];
 
-    const secondNames = [
+const thirdNames = [
+    "Palermo",
+    "Nitro",
+    "Trinity",
+    "Suede",
+    "Clyde",
+    "Speedfusion",
+    "Mirage",
+    "Slipstream",
+    "Pacer",
+    "Morphic",
+    "Velophasis",
+    "Hypnotic",
+    "Future",
+    "Blaze",
+    "Rider",
+    "Court",
+    "R698",
+    "Indoor",
+    "CA",
+    "GV",
+    "Electron",
+    "Spirex",
+    "Playmaker",
+    "Thunder",
+    "Nova",
+    "Caven"
+];
 
-        "Runner",
-        "Flex",
-        "Mode",
-        "Force",
-        "Wave",
-        "Edge",
-        "Fly",
-        "Boost",
-        "Flow",
-        "Drive",
-        "Sprint",
-        "Vision",
-        "Motion",
-        "Pulse",
-        "Strike",
-        "Storm",
-        "Impact",
-        "X",
-        "Pro",
-        "Max",
-        "Elite",
-        "Prime",
-        "React",
-        "Fusion",
-        "Shift",
-        "Nova",
-        "Air",
-        "Energy",
-        "One",
-        "Core",
-        "Velocity",
-        "Infinity",
-        "Power",
-        "Light",
-        "Jump",
-        "ForceX",
-        "Nitro",
-        "WaveX",
-        "Rush",
-        "Flyer"
-    ];
+const fakeName =
+    firstNames[
+        product.id % firstNames.length
+    ] + " " +
 
-    const thirdNames = [
+    secondNames[
+        Math.floor(product.id / 3) % secondNames.length
+    ] + " " +
 
-        "Silver",
-        "Gold",
-        "Carbon",
-        "Steel",
-        "Ghost",
-        "Phantom",
-        "Shadow",
-        "Ice",
-        "Fire",
-        "Volt",
-        "Thunder",
-        "Night",
-        "Sky",
-        "Cloud",
-        "Stone",
-        "Graphite",
-        "Neon",
-        "Flame",
-        "Titanium",
-        "Crystal",
-        "Obsidian",
-        "Arctic",
-        "Inferno",
-        "Ocean",
-        "Midnight",
-        "Pearl",
-        "Smoke",
-        "Lunar",
-        "Solar",
-        "Emerald",
-        "Ruby",
-        "Onyx",
-        "Ivory",
-        "Storm",
-        "Frost",
-        "Platinum"
-    ];
-
-    const fakeName =
-
-        firstNames[
-            product.id % firstNames.length
-        ]
-
-        + " " +
-
-        secondNames[
-            product.id % secondNames.length
-        ]
-
-        + " " +
-
-        thirdNames[
-            product.id % thirdNames.length
-        ]
-
-        + " " +
-
-        product.id.toString().slice(-4);
+    thirdNames[
+        Math.floor(product.id / 7) % thirdNames.length
+    ]
 
 
                             const availableSizes = product.variants
@@ -494,9 +739,16 @@ async function loadProducts() {
                                         {fakeName}
                                     </h2>
 
+
+
+
+
+
+
                                     <p className="text-xs md:text-sm text-gray-500 mt-1">
                                         {product.vendor}
                                     </p>
+
 
                                     <div className="mt-2 inline-block bg-black text-white text-xs px-3 py-1 rounded-full">
                                         {product.gender}
