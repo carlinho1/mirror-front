@@ -17,6 +17,10 @@ export default function Home() {
 
     const [selectedColor, setSelectedColor] = useState("");
 
+    const [selectedProduct, setSelectedProduct] = useState<any>(null);
+
+    const [selectedImage, setSelectedImage] = useState(0);
+
         // STEP 3
     // RESET PRODUCTS WHEN FILTER CHANGES
 
@@ -450,27 +454,73 @@ async function loadProducts() {
                                     className="bg-white rounded-2xl shadow p-3 md:p-4"
                                 >
 
-<div className="flex gap-2 overflow-x-auto">
-    {(product.images?.length
-        ? product.images
-        : [{ url: product.image }]
-    ).map((img:any) => (
+<img
+    src={product.image}
+    alt={fakeName}
+    className="
+        w-full
+        aspect-square
+        object-cover
+        rounded-xl
+        cursor-pointer
+    "
+    onClick={() => {
 
-        <img
-            key={img.id || img.url}
-            src={img.url}
-            alt={fakeName}
-            className="
-                w-full
-                aspect-square
-                object-cover
-                rounded-xl
-                flex-shrink-0
-            "
-        />
+        setSelectedProduct(product);
 
-    ))}
+        setSelectedImage(0);
+
+    }}
+/>
+
+
+
+
+
+
+
+
+
+
+<div className="flex justify-between mt-4">
+
+    <button
+        onClick={() =>
+            setSelectedImage(prev =>
+                Math.max(prev - 1, 0)
+            )
+        }
+    >
+        ← Anterior
+    </button>
+
+    <button
+        onClick={() =>
+            setSelectedImage(prev =>
+                Math.min(
+                    prev + 1,
+                    selectedProduct.images.length - 1
+                )
+            )
+        }
+    >
+        Siguiente →
+    </button>
+
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                                     <h2 className="font-bold mt-4 text-sm md:text-lg leading-tight">
                                         {fakeName}
@@ -553,6 +603,115 @@ async function loadProducts() {
                 </InfiniteScroll>
 
             </div>
+
+
+
+
+
+
+
+
+
+
+{selectedProduct && (
+
+    <div
+        className="
+            fixed
+            inset-0
+            bg-black/80
+            z-50
+            flex
+            items-center
+            justify-center
+            p-4
+        "
+        onClick={() => setSelectedProduct(null)}
+    >
+
+        <div
+            className="
+                bg-white
+                rounded-2xl
+                max-w-4xl
+                w-full
+                p-4
+            "
+            onClick={(e) => e.stopPropagation()}
+        >
+
+            <img
+                src={
+                    selectedProduct.images?.[selectedImage]?.url ||
+                    selectedProduct.image
+                }
+                className="
+                    w-full
+                    max-h-[70vh]
+                    object-contain
+                    rounded-xl
+                "
+            />
+
+            <div className="flex gap-2 mt-4 overflow-x-auto">
+
+                {(selectedProduct.images?.length
+                    ? selectedProduct.images
+                    : [{ url: selectedProduct.image }]
+                ).map((img:any, index:number) => (
+
+                    <img
+                        key={index}
+                        src={img.url}
+                        onClick={() =>
+                            setSelectedImage(index)
+                        }
+                        className={`
+                            w-20
+                            h-20
+                            object-cover
+                            rounded-lg
+                            cursor-pointer
+                            border-2
+                            ${
+                                selectedImage === index
+                                    ? "border-black"
+                                    : "border-transparent"
+                            }
+                        `}
+                    />
+
+                ))}
+
+            </div>
+
+            <button
+                onClick={() => setSelectedProduct(null)}
+                className="
+                    mt-4
+                    px-4
+                    py-2
+                    bg-black
+                    text-white
+                    rounded-xl
+                "
+            >
+                Cerrar
+            </button>
+
+        </div>
+
+    </div>
+
+)}
+
+
+
+
+
+
+
+
 
         </main>
     );
