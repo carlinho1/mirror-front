@@ -21,6 +21,15 @@ export default function Home() {
 
     const [selectedImage, setSelectedImage] = useState(0);
 
+    const [productImages, setProductImages] = useState<{
+        [key: number]: number;
+    }>({});
+
+    const [showSizeGuide, setShowSizeGuide] = useState(false);
+
+    const [sizeGuideGender, setSizeGuideGender] = useState("");
+
+
         // STEP 3
     // RESET PRODUCTS WHEN FILTER CHANGES
 
@@ -43,6 +52,38 @@ export default function Home() {
         loadProducts();
 
     }, [page, selectedGender, selectedSize, selectedColor]);
+
+
+const menSizes = [
+    ["37", "24", "6"],
+    ["37½", "24.5", "6½"],
+    ["38", "25", "7"],
+    ["38½", "25.5", "7½"],
+    ["39", "26", "8"],
+    ["39½", "26.5", "8½"],
+    ["40", "27", "9"],
+    ["40½", "27.5", "9½"],
+    ["41", "28", "10"],
+    ["41½", "28.5", "10½"],
+    ["42", "29", "11"],
+    ["42½", "29.5", "11½"],
+    ["43", "30", "12"],
+    ["43½", "30.5", "12½"],
+    ["44", "31", "13"],
+    ["44½", "31.5", "13½"],
+    ["45", "32", "14"]
+];
+
+const womenSizes = [
+    ["35", "22", "5½"],
+    ["36", "22.5", "6"],
+    ["36½", "23", "6½"],
+    ["37", "23.5", "7"],
+    ["37½", "24", "7½"],
+    ["38", "24.5", "8"],
+    ["38½", "25", "8½"],
+    ["39", "25.5", "9"]
+];
 
 
 async function loadProducts() {
@@ -454,8 +495,13 @@ async function loadProducts() {
                                     className="bg-white rounded-2xl shadow p-3 md:p-4"
                                 >
 
+
 <img
-    src={product.image}
+    src={
+        product.images?.[
+            productImages[product.id] || 0
+        ]?.url || product.image
+    }
     alt={fakeName}
     className="
         w-full
@@ -465,20 +511,13 @@ async function loadProducts() {
         cursor-pointer
     "
     onClick={() => {
-
         setSelectedProduct(product);
 
-        setSelectedImage(0);
-
+        setSelectedImage(
+            productImages[product.id] || 0
+        );
     }}
 />
-
-
-
-
-
-
-
 
 
 
@@ -486,37 +525,53 @@ async function loadProducts() {
 
     <button
         onClick={() =>
-            setSelectedImage(prev =>
-                Math.max(prev - 1, 0)
-            )
+            setProductImages(prev => ({
+                ...prev,
+                [product.id]: Math.max(
+                    (prev[product.id] || 0) - 1,
+                    0
+                )
+            }))
         }
+        className="
+            w-10
+            h-10
+            flex
+            items-center
+            justify-center
+            rounded-full
+            border
+            hover:bg-gray-100
+        "
     >
-        ← Anterior
+        ←
     </button>
 
     <button
         onClick={() =>
-            setSelectedImage(prev =>
-                Math.min(
-                    prev + 1,
-                    selectedProduct.images.length - 1
+            setProductImages(prev => ({
+                ...prev,
+                [product.id]: Math.min(
+                    (prev[product.id] || 0) + 1,
+                    (product.images?.length || 1) - 1
                 )
-            )
+            }))
         }
+        className="
+            w-10
+            h-10
+            flex
+            items-center
+            justify-center
+            rounded-full
+            border
+            hover:bg-gray-100
+        "
     >
-        Siguiente →
+        →
     </button>
 
 </div>
-
-
-
-
-
-
-
-
-
 
 
 
@@ -592,6 +647,33 @@ async function loadProducts() {
 
                                         </div>
 
+<button
+    // onClick={() => setShowSizeGuide(true)}
+
+onClick={() => {
+
+    setSizeGuideGender(product.gender);
+
+    setShowSizeGuide(true);
+
+}}
+
+    className="
+        mt-4
+        w-full
+        border
+        rounded-xl
+        py-2
+        text-sm
+        hover:bg-black
+        hover:text-white
+        transition
+    "
+>
+    📏 Guía de tallas
+</button>
+
+
                                     </div>
 
                                 </div>
@@ -653,6 +735,14 @@ async function loadProducts() {
                 "
             />
 
+
+
+
+
+
+
+
+
             <div className="flex gap-2 mt-4 overflow-x-auto">
 
                 {(selectedProduct.images?.length
@@ -708,7 +798,257 @@ async function loadProducts() {
 
 
 
+{showSizeGuide && (
 
+    <div
+        className="
+            fixed
+            inset-0
+            bg-black/80
+            z-50
+            flex
+            items-center
+            justify-center
+            p-4
+        "
+        onClick={() => setShowSizeGuide(false)}
+    >
+
+        <div
+            className="
+                bg-white
+                rounded-2xl
+                max-w-4xl
+                w-full
+                max-h-[90vh]
+                overflow-y-auto
+                p-6
+            "
+            onClick={(e) => e.stopPropagation()}
+        >
+
+<h2 className="text-2xl font-bold mb-4">
+
+    Guía de Tallas {sizeGuideGender}
+
+</h2>
+
+
+
+            {/* Imagen */}
+            {/* <img
+                src="/guia-tallas-hombre.webp"
+                alt="Guía de tallas"
+                className="
+        max-w-full
+        max-h-[500px]
+        object-contain
+        mx-auto
+        mb-6
+                "
+            /> */}
+
+            {/* Tabla */}
+            {/* <table className="w-full border-collapse">
+
+                <thead>
+                    <tr className="bg-gray-100">
+                        <th className="border p-2">
+                            Talla CO
+                        </th>
+                        <th className="border p-2">
+                            Largo Pie (cm)
+                        </th>
+                        <th className="border p-2">
+                            Talla US
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {[
+                        ["37", "24", "6"],
+                        ["37½", "24.5", "6½"],
+                        ["38", "25", "7"],
+                        ["38½", "25.5", "7½"],
+                        ["39", "26", "8"],
+                        ["39½", "26.5", "8½"],
+                        ["40", "27", "9"],
+                        ["40½", "27.5", "9½"],
+                        ["41", "28", "10"],
+                        ["41½", "28.5", "10½"],
+                        ["42", "29", "11"],
+                        ["42½", "29.5", "11½"],
+                        ["43", "30", "12"],
+                        ["43½", "30.5", "12½"],
+                        ["44", "31", "13"],
+                        ["44½", "31.5", "13½"],
+                        ["45", "32", "14"]
+                    ].map((row) => (
+
+                        <tr key={row[0]}>
+
+                            <td className="border p-2 text-center">
+                                {row[0]}
+                            </td>
+
+                            <td className="border p-2 text-center">
+                                {row[1]}
+                            </td>
+
+                            <td className="border p-2 text-center">
+                                {row[2]}
+                            </td>
+
+                        </tr>
+
+                    ))}
+
+                </tbody>
+
+            </table>
+
+            <button
+                onClick={() => setShowSizeGuide(false)}
+                className="
+                    mt-6
+                    px-4
+                    py-2
+                    bg-black
+                    text-white
+                    rounded-xl
+                "
+            >
+                Cerrar
+            </button> */}
+
+
+
+<div className="flex flex-col md:flex-row gap-6 items-start">
+
+    {/* Imagen */}
+
+    <div className="md:w-1/2">
+
+        <img
+            src="/guia-tallas-hombre.webp"
+            alt="Guía de tallas"
+            className="
+                w-full
+                object-contain
+                rounded-xl
+            "
+        />
+
+    </div>
+
+    {/* Tabla */}
+
+    <div className="md:w-1/2 overflow-x-auto">
+
+        <table className="w-full border-collapse">
+
+            <thead>
+                <tr className="bg-gray-100">
+                    <th className="border p-2">
+                        Talla CO
+                    </th>
+
+                    <th className="border p-2">
+                        Largo Pie (cm)
+                    </th>
+
+                    <th className="border p-2">
+                        Talla US
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+
+{
+    (sizeGuideGender === "Mujer"
+        ? womenSizes
+        : menSizes
+    ).map((row) => (
+
+        <tr key={row[0]}>
+
+            <td className="border p-2 text-center">
+                {row[0]}
+            </td>
+
+            <td className="border p-2 text-center">
+                {row[1]}
+            </td>
+
+            <td className="border p-2 text-center">
+                {row[2]}
+            </td>
+
+        </tr>
+
+    ))
+}
+
+
+
+                {/* {[
+                    ["37", "24", "6"],
+                    ["37½", "24.5", "6½"],
+                    ["38", "25", "7"],
+                    ["38½", "25.5", "7½"],
+                    ["39", "26", "8"],
+                    ["39½", "26.5", "8½"],
+                    ["40", "27", "9"],
+                    ["40½", "27.5", "9½"],
+                    ["41", "28", "10"],
+                    ["41½", "28.5", "10½"],
+                    ["42", "29", "11"],
+                    ["42½", "29.5", "11½"],
+                    ["43", "30", "12"],
+                    ["43½", "30.5", "12½"],
+                    ["44", "31", "13"],
+                    ["44½", "31.5", "13½"],
+                    ["45", "32", "14"]
+                ].map((row) => (
+
+                    <tr key={row[0]}>
+
+                        <td className="border p-2 text-center">
+                            {row[0]}
+                        </td>
+
+                        <td className="border p-2 text-center">
+                            {row[1]}
+                        </td>
+
+                        <td className="border p-2 text-center">
+                            {row[2]}
+                        </td>
+
+                    </tr>
+
+                ))} */}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+
+
+        </div>
+
+    </div>
+
+)}
 
 
 
