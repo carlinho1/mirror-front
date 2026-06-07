@@ -489,7 +489,7 @@ export default function Home() {
           {/* Talla */}
           <div className="flex items-center gap-4">
             <span className="text-xs font-medium tracking-widest uppercase text-gray-400 dark:text-zinc-500 w-14 shrink-0">
-              Talla
+              Talla US
             </span>
             <div className="flex flex-wrap gap-2">
               {["6","6.5","7","7.5","8","8.5","9","9.5","10","10.5","11","11.5","12"].map(size => (
