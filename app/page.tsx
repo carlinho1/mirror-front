@@ -17,9 +17,6 @@ export default function Home() {
 
     const [selectedColor, setSelectedColor] = useState("");
 
-        // STEP 3
-    // RESET PRODUCTS WHEN FILTER CHANGES
-
     useEffect(() => {
 
         setProducts([]);
@@ -30,9 +27,6 @@ export default function Home() {
 
     }, [selectedGender, selectedSize, selectedColor]);
 
-
-    // STEP 4
-    // LOAD PRODUCTS
 
     useEffect(() => {
 
@@ -45,26 +39,12 @@ async function loadProducts() {
 
     try {
 
-        //const res = await fetch(
-        //   `https://node-api-fmq5.onrender.com/products?page=${page}&gender=${selectedGender}&size=${selectedSize}`,
-        //    {
-        //        cache: "no-store"
-        //    }
-        //);
-
         const res = await fetch(
             `https://node-api-fmq5.onrender.com/products?page=${page}&gender=${selectedGender}&size=${selectedSize}&color=${selectedColor}`,
             {
                 cache: "no-store"
             }
         );  
-
-        // const res = await fetch(
-        //     `https://node-api-fmq5.onrender.com/products?page=${page}&gender=${selectedGender}&size=${selectedSize}`,
-        //     {
-        //         cache: "no-store"
-        //     }
-        // );
 
         const data = await res.json();
 
@@ -105,65 +85,6 @@ async function loadProducts() {
         console.log(error);
     }
 }
-
-
-//     async function loadProducts() {
-
-//         try {
-
-//             // const res = await fetch(
-//             //     `http://192.168.20.2:3001/products?page=${page}`,
-//             //     {
-//             //         cache: "no-store"
-//             //     }
-//             // );
-
-//             const res = await fetch(
-//                 `http://192.168.20.2:3001/products?page=${page}&gender=${selectedGender}&size=${selectedSize}`,
-//                 {
-//                     cache: "no-store"
-//                 }
-// );
-
-//             const data = await res.json();
-
-//             // SI YA NO HAY MÁS PRODUCTOS
-//             if (!data.length) {
-
-//                 setHasMore(false);
-
-//                 return;
-//             }
-
-//             // AGREGAR PRODUCTOS NUEVOS
-//             // setProducts((prev) => [...prev, ...data]);
-//             setProducts(prev => {
-
-//                 const allProducts = [...prev, ...data];
-
-//                 const uniqueProducts = allProducts.filter(
-//                     (product, index, self) =>
-//                         index === self.findIndex(p => p.id === product.id)
-//                 );
-
-//                 return uniqueProducts;
-//             });
-
-//             // SIGUIENTE PÁGINA
-//             setPage((prev) => prev + 1);
-
-//         } catch (error) {
-
-//             console.log(error);
-//         }
-//     }
-
-    // CARGA INICIAL
-    // useEffect(() => {
-
-    //     loadProducts();
-
-    // }, []);
 
 
 
@@ -358,23 +279,10 @@ async function loadProducts() {
 
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
 
-                        {/* {products.map((product: any) => { */}
-
 
                         {products
 
-                            // .filter((product: any) => {
 
-                            //     if (!selectedSize) {
-                            //         return true;
-                            //     }
-
-                            //     return product.variants?.some(
-                            //         (v: any) =>
-                            //             v.available &&
-                            //             v.size === selectedSize
-                            //     );
-                            // })
 
                             .filter((product: any) => {
 
@@ -397,41 +305,6 @@ async function loadProducts() {
 
                                 product.gender === selectedGender;
 
-
-
-// // EXTRAER COLOR DESDE TAGS
-// //     const colorTag = product.tags?.find(
-// //         (tag:string) =>
-// //             tag.includes("Color::")
-// //     );
-
-// //     const productColor = colorTag
-// //         ?.split("Color::")[1]
-// //         ?.split("/")[0]
-// //         ?.trim();
-
-// //     FILTRO COLOR
-// //     const matchesColor = !selectedColor ||
-
-// //         productColor === selectedColor;
-
-// const colorTag = product.tags?.find(
-//     (tag:string) =>
-//         tag.includes("Color::")
-// );
-
-// const productColors = colorTag
-//     ?.split("Color::")[1]
-//     ?.split("/")
-//     ?.map(
-//         (c:string) => c.trim()
-//     );
-
-// const matchesColor = !selectedColor ||
-
-//     productColors?.includes(
-//         selectedColor
-//     );
 
 const colorTag = product.tags?.find(
     (tag:string)=>
@@ -464,155 +337,6 @@ const matchesColor =
                             .map((product: any) => {
 
 
-    // const firstNames = [
-
-    //     "Urban",
-    //     "Shadow",
-    //     "Nova",
-    //     "Velocity",
-    //     "Quantum",
-    //     "Motion",
-    //     "Street",
-    //     "Elite",
-    //     "Vision",
-    //     "Fusion",
-    //     "Dynamic",
-    //     "Apex",
-    //     "Vertex",
-    //     "Legacy",
-    //     "Prime",
-    //     "Vortex",
-    //     "Neo",
-    //     "Storm",
-    //     "Pulse",
-    //     "Titan",
-    //     "Infinity",
-    //     "Orbit",
-    //     "Matrix",
-    //     "Ignite",
-    //     "Blaze",
-    //     "Rush",
-    //     "Turbo",
-    //     "Hyper",
-    //     "Zenith",
-    //     "Sonic",
-    //     "Volt",
-    //     "Royal",
-    //     "Astral",
-    //     "Cyber",
-    //     "Gravity",
-    //     "Altitude",
-    //     "Core",
-    //     "Rapid",
-    //     "Chrome",
-    //     "Drift"
-    // ];
-
-    // const secondNames = [
-
-    //     "Runner",
-    //     "Flex",
-    //     "Mode",
-    //     "Force",
-    //     "Wave",
-    //     "Edge",
-    //     "Fly",
-    //     "Boost",
-    //     "Flow",
-    //     "Drive",
-    //     "Sprint",
-    //     "Vision",
-    //     "Motion",
-    //     "Pulse",
-    //     "Strike",
-    //     "Storm",
-    //     "Impact",
-    //     "X",
-    //     "Pro",
-    //     "Max",
-    //     "Elite",
-    //     "Prime",
-    //     "React",
-    //     "Fusion",
-    //     "Shift",
-    //     "Nova",
-    //     "Air",
-    //     "Energy",
-    //     "One",
-    //     "Core",
-    //     "Velocity",
-    //     "Infinity",
-    //     "Power",
-    //     "Light",
-    //     "Jump",
-    //     "ForceX",
-    //     "Nitro",
-    //     "WaveX",
-    //     "Rush",
-    //     "Flyer"
-    // ];
-
-    // const thirdNames = [
-
-    //     "Silver",
-    //     "Gold",
-    //     "Carbon",
-    //     "Steel",
-    //     "Ghost",
-    //     "Phantom",
-    //     "Shadow",
-    //     "Ice",
-    //     "Fire",
-    //     "Volt",
-    //     "Thunder",
-    //     "Night",
-    //     "Sky",
-    //     "Cloud",
-    //     "Stone",
-    //     "Graphite",
-    //     "Neon",
-    //     "Flame",
-    //     "Titanium",
-    //     "Crystal",
-    //     "Obsidian",
-    //     "Arctic",
-    //     "Inferno",
-    //     "Ocean",
-    //     "Midnight",
-    //     "Pearl",
-    //     "Smoke",
-    //     "Lunar",
-    //     "Solar",
-    //     "Emerald",
-    //     "Ruby",
-    //     "Onyx",
-    //     "Ivory",
-    //     "Storm",
-    //     "Frost",
-    //     "Platinum"
-    // ];
-
-    // const fakeName =
-
-    //     firstNames[
-    //         product.id % firstNames.length
-    //     ]
-
-    //     + " " +
-
-    //     secondNames[
-    //         product.id % secondNames.length
-    //     ]
-
-    //     + " " +
-
-    //     thirdNames[
-    //         product.id % thirdNames.length
-    //     ]
-
-    //     + " " +
-
-    //     product.id.toString().slice(-4);
 
     const firstNames = [
     "Palermo",
