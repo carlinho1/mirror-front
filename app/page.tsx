@@ -454,18 +454,30 @@ export default function Home() {
       <div className="max-w-7xl mx-auto">
 
         {/* ── HEADER ── */}
-        <div className="flex items-end justify-between mt-8 mb-8">
-          <h1
-            className="text-5xl leading-none text-gray-900 dark:text-white"
-            style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, letterSpacing: "-2px" }}
-          >
-            Node
-          </h1>
-          <p className="text-sm text-gray-400 dark:text-zinc-500 mb-1">
-            {hasActiveFilters ? "Filtrando resultados" : "Todos los productos"}
-          </p>
-        </div>
-
+{/* ── HEADER ── */}
+<div className="mt-8 mb-8 pb-6 border-b border-gray-100 dark:border-zinc-800">
+  <div className="flex items-end justify-between gap-4">
+    <div>
+      <div className="flex items-baseline gap-2.5 mb-1.5">
+        <h1
+          className="text-5xl leading-none text-gray-900 dark:text-white"
+          style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, letterSpacing: "-3px" }}
+        >
+          NODE
+        </h1>
+        <span className="text-[11px] font-medium uppercase tracking-wide text-gray-400 dark:text-zinc-500 border border-gray-200 dark:border-zinc-700 rounded px-2.5 py-0.5">
+          USA Outlets
+        </span>
+      </div>
+      <p className="text-[13.5px] text-gray-500 dark:text-zinc-400 leading-snug">
+        Compras por encargo de productos originales en outlets de Estados Unidos
+      </p>
+    </div>
+    <p className="text-xs text-gray-400 dark:text-zinc-500 mb-1 whitespace-nowrap">
+      {hasActiveFilters ? "Filtrando resultados" : "Todos los productos"}
+    </p>
+  </div>
+</div>
         {/* ── FILTER PANEL ── */}
         <div className="bg-white dark:bg-zinc-800 rounded-2xl p-5 mb-8 shadow-sm border border-gray-100 dark:border-zinc-700 flex flex-col gap-4">
 
