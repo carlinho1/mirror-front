@@ -465,9 +465,6 @@ export default function Home() {
         >
           NODE
         </h1>
-        <span className="text-[11px] font-medium uppercase tracking-wide text-gray-400 dark:text-zinc-500 border border-gray-200 dark:border-zinc-700 rounded px-2.5 py-0.5">
-          USA Outlets
-        </span>
       </div>
       <p className="text-[13.5px] text-gray-500 dark:text-zinc-400 leading-snug">
         Compras por encargo de productos originales en outlets de Estados Unidos
