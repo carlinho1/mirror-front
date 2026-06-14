@@ -398,21 +398,27 @@ export default function Home() {
   const [productImages, setProductImages] = useState<{ [key: number]: number }>({});
   const [showSizeGuide, setShowSizeGuide] = useState(false);
   const [sizeGuideGender, setSizeGuideGender] = useState("");
+  const [selectedBrand, setSelectedBrand] = useState("");
 
   useEffect(() => {
     setProducts([]);
     setPage(1);
     setHasMore(true);
-  }, [selectedGender, selectedSize, selectedColor]);
+  }, [selectedGender, selectedSize, selectedColor, selectedBrand]);
 
-  useEffect(() => {
-    loadProducts();
-  }, [page, selectedGender, selectedSize, selectedColor]);
+//   useEffect(() => {
+//     loadProducts();
+//   }, [page, selectedGender, selectedSize, selectedColor, selectedBrand]);
+
+useEffect(() => {
+  if (page === 1) return; // el reset ya lo maneja el otro efecto
+  loadProducts();
+}, [page]);
 
   async function loadProducts() {
     try {
       const res = await fetch(
-        `https://node-api-fmq5.onrender.com/products?page=${page}&gender=${selectedGender}&size=${selectedSize}&color=${selectedColor}`,
+        `https://node-api-fmq5.onrender.com/products?page=${page}&gender=${selectedGender}&size=${selectedSize}&color=${selectedColor}&brand=${selectedBrand.toUpperCase()}`,
         { cache: "no-store" }
       );
       const data = await res.json();
@@ -429,13 +435,14 @@ export default function Home() {
     }
   }
 
-  const hasActiveFilters = selectedGender || selectedSize || selectedColor;
-  const activeLabels = [selectedGender, selectedSize ? `Talla ${selectedSize}` : "", selectedColor].filter(Boolean);
+  const hasActiveFilters = selectedGender || selectedSize || selectedColor|| selectedBrand;
+  const activeLabels = [selectedGender, selectedSize ? `Talla ${selectedSize}` : "", selectedColor, selectedBrand].filter(Boolean);
 
   function clearAll() {
     setSelectedGender("");
     setSelectedSize("");
     setSelectedColor("");
+    setSelectedBrand("");
   }
 
   const pillBase = "px-4 py-1.5 rounded-full border text-sm transition-all duration-150 cursor-pointer whitespace-nowrap";
@@ -533,6 +540,31 @@ export default function Home() {
             </div>
           </div>
 
+
+
+
+
+
+<div className="border-t border-gray-100 dark:border-zinc-700" />
+
+<div className="flex items-center gap-4">
+  <span className="text-xs font-medium tracking-widest uppercase text-gray-400 dark:text-zinc-500 w-14 shrink-0">
+    Marca
+  </span>
+  <div className="flex flex-wrap gap-2">
+    {["Puma", "Adidas"].map(brand => (
+      <button key={brand} onClick={() => setSelectedBrand(selectedBrand === brand ? "" : brand)}
+        className={`${pillBase} ${selectedBrand === brand ? pillActive : pillInactive}`}>
+        {brand}
+      </button>
+    ))}
+  </div>
+</div>
+
+
+
+
+
           {/* Filtros activos */}
           {hasActiveFilters && (
             <>
@@ -563,7 +595,8 @@ export default function Home() {
                 const colorTag = product.tags?.find((tag: string) => tag.includes("Color::"));
                 const productColors = colorTag?.split("Color::")[1]?.split("/")?.map((c: string) => c.trim());
                 const matchesColor = !selectedColor || productColors?.includes(selectedColor);
-                return matchesSize && matchesGender && matchesColor;
+                const matchesBrand = !selectedBrand || product.vendor?.toLowerCase() === selectedBrand.toLowerCase();
+                return matchesSize && matchesGender && matchesColor && matchesBrand;
               })
               .map((product: any) => {
                 const fakeName = getFakeName(product.id);
